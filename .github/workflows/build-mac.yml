@@ -6,7 +6,6 @@ name: Build for macOS
 on:
   push:
     tags: ["v*"]
-    branches: [feat/mac]
   workflow_dispatch:
 
 permissions:

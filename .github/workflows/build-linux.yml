@@ -6,7 +6,6 @@ name: Build for Linux
 on:
   push:
     tags: ["v*"]
-    branches: [feat/linux]
   workflow_dispatch:
 
 permissions:
