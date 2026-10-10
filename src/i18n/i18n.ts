@@ -3,11 +3,30 @@
 // another language falls back to it, so an incomplete translation never breaks the app.
 import en from '../../locales/en.json';
 import es from '../../locales/es.json';
+import ca from '../../locales/ca.json';
+import de from '../../locales/de.json';
+import fr from '../../locales/fr.json';
+import it from '../../locales/it.json';
+import nl from '../../locales/nl.json';
+import pt from '../../locales/pt.json';
+import esAndaluh from '../../locales/es-x-andaluh.json';
 
 export type MessageKey = Exclude<keyof typeof en, '_language'>;
 type Catalog = { _language: string } & Partial<Record<MessageKey, string>>;
 
-const CATALOGS = { en, es } satisfies Record<string, Catalog>;
+// Order of the language selector. Andalûh ("es-x-andaluh") is never picked from the system
+// languages: its base is "es", so resolveLanguage() picks Spanish; it is chosen by hand.
+const CATALOGS = {
+  en,
+  es,
+  ca,
+  de,
+  fr,
+  it,
+  nl,
+  pt,
+  'es-x-andaluh': esAndaluh,
+} satisfies Record<string, Catalog>;
 
 export type Language = keyof typeof CATALOGS;
 export const LANGUAGES = Object.keys(CATALOGS) as Language[];
