@@ -8,8 +8,7 @@ Edit the language's file (for example `locales/es.json`) and open a pull request
 
 ## Add a new language
 
-1. Copy `locales/en.json` to `locales/<code>.json`, where `<code>` is the two-letter [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) of the language (`fr`, `de`, `pt`…). PDF Diva matches languages by this base code, so one file serves every regional variant (`pt` covers both `pt-PT` and `pt-BR`). A variety with no code of its own uses a private-use tag instead and is never picked from the system language, only by hand in Settings: Andalûh is `es-x-andaluh` (its key in `CATALOGS` goes in quotes).
-2. Set `_language` to the language's name written in that language (`Français`, `Deutsch`, `Português`). That is how it appears in the settings, so people can find it whatever language the app is showing.
+1. Copy `locales/en.json` to `locales/<code>.json`, where `<code>` is the two-letter [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) of the language (`fr`, `de`, `pt`…). PDF Diva matches languages by this base code, so one file serves every regional variant (`pt` covers both `pt-PT` and `pt-BR`).2. Set `_language` to the language's name written in that language (`Français`, `Deutsch`, `Português`). That is how it appears in the settings, so people can find it whatever language the app is showing.
 3. Translate every value.
 4. Register the file in [`src/i18n/i18n.ts`](../src/i18n/i18n.ts): import it next to the others and add it to `CATALOGS`. That is the only code change.
 5. Open a pull request. If you can, run the app (`npm install`, then `npm run dev`), choose the language in Settings and look at every screen: the start screen, the reader, the settings and password dialogs, and the speaker view.
