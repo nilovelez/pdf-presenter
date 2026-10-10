@@ -7,6 +7,13 @@ Until version 1.0.0 the interface was in Spanish only; entries up to that versio
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-10-10
+
+### Added
+- **PDF Diva for macOS.** A single download for Apple silicon and Intel Macs, macOS 13 or later. It appears in Finder's **Open With** menu for PDFs. See the README for the first start: the app isn't notarized by Apple, so macOS asks you to confirm it once.
+- **PDF Diva for Linux**, as a `.deb` package for Debian, Ubuntu and distributions based on them (64-bit). It appears in **Open With** for PDFs.
+- **New languages**: Catalan, Dutch, French, German, Italian and Portuguese, chosen automatically from the system language. Andalûh is also available in **Settings > Language**.
+
 ## [1.3.0] - 2026-10-07
 
 ### Added
