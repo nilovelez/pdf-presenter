@@ -13,6 +13,8 @@ A partir de aquí, promoción y mantenimiento; no hay más hitos de funciones pr
 
 ## Diario
 
+- 2026-10-10: los idiomas salen por orden alfabético en Ajustes; el tag v1.4.0 se mueve a ese arreglo (la release aún no estaba publicada).
+
 - 2026-10-10: el .dmg funciona a la primera en un MacBook con Apple silicon y monitor externo. feat/mac y feat/linux fusionadas en main, idiomas nuevos registrados, v1.4.0 etiquetada; esperando a que Nilo publique la release.
 
 - 2026-10-09: sesión cerrada; en pausa hasta que Nilo pueda probar el .dmg en un Mac.
