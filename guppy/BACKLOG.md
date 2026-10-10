@@ -4,7 +4,6 @@ Pendientes de PDF Diva, del más próximo al menos urgente. Lo que ya está publ
 
 ## Tras la v1.4.0
 
-- [ ] **Web**: cuando la release v1.4.0 esté publicada, enlaces de descarga para Windows, Mac y Linux y versión 1.4.0 (`docs/website.md`).
 - [ ] **Runner de Linux**: `ubuntu-latest` pasa a Ubuntu 26 desde el 19 de octubre de 2026; comprobar que el build sigue bien o fijar `ubuntu-24.04`.
 
 ## Riesgos conocidos y sin probar
