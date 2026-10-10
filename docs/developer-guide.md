@@ -2,7 +2,7 @@
 
 Everything a new developer (or agent) needs that is not obvious from the code. Project rules and conventions are in [`CLAUDE.md`](../CLAUDE.md); user-facing text is in the README and CHANGELOG; the website is covered in [`website.md`](website.md).
 
-State at the time of writing: **v1.3.0 is published**. Milestone 7 (multi-language: English and Spanish) is v1.1.0, milestone 8 (opening PDFs from the system, "Open with…") is v1.2.0, milestone 9 (multi-monitor and UI improvements) is v1.3.0; milestone 10 (Mac and Linux; Linux means Debian and Ubuntu only) is in progress, Mac first.
+State at the time of writing: **v1.4.0**. Milestone 7 (multi-language: English and Spanish) is v1.1.0, milestone 8 (opening PDFs from the system, "Open with…") is v1.2.0, milestone 9 (multi-monitor and UI improvements) is v1.3.0, milestone 10 (Mac and Linux builds, Linux meaning Debian and Ubuntu only, plus seven new languages) is v1.4.0. No more feature milestones are planned: maintenance from here on.
 
 ## Architecture
 
@@ -30,7 +30,7 @@ src/
 locales/           UI text, one JSON file per language (en.json is the reference)
 resources/icons/     Phosphor UI icons (MIT) ; resources/icons/app/ = app icon set (icon.ico, appx/ tiles)
 resources/displays/  Our own drawings for the "Configure displays" tiles (laptop/monitor, speaker/audience)
-electron-builder.yml Packaging (NSIS + MSIX on Windows, dmg on macOS)
+electron-builder.yml Packaging (NSIS + MSIX on Windows, dmg on macOS, deb on Linux)
 site/                The website (see website.md); scripts/build-privacy.mjs builds its privacy page
 ```
 
@@ -78,8 +78,9 @@ All UI text is in `locales/<code>.json`: flat keys grouped by screen (`reader.pa
 | `npm run dist` | NSIS installer: `release/PDF-Diva-Setup-<version>.exe` |
 | `npm run dist:store` | MSIX package: `release/PDF-Diva-<version>.appx` (unsigned: the Store signs it) |
 | `npm run dist:mac` | macOS only: universal dmg, `release/PDF-Diva-<version>.dmg` (normally built by GitHub Actions) |
+| `npm run dist:linux` | Linux only: `release/PDF-Diva-<version>-amd64.deb` (normally built by GitHub Actions) |
 
-There are no automated tests apart from `scripts/smoke-test.mjs` (`node scripts/smoke-test.mjs <app executable>`), a short end-to-end run that the Mac build runs in CI and that also works on Windows. Behaviour is checked by running the real app and driving it through the Chromium DevTools protocol (see "Testing" below).
+There are no automated tests apart from `scripts/smoke-test.mjs` (`node scripts/smoke-test.mjs <app executable>`), a short end-to-end run that the Mac and Linux builds run in CI and that also works on Windows. Behaviour is checked by running the real app and driving it through the Chromium DevTools protocol (see "Testing" below).
 
 ## Packaging
 
@@ -91,6 +92,8 @@ There are no automated tests apart from `scripts/smoke-test.mjs` (`node scripts/
   - Mac and Linux (milestone 10): `mac.fileAssociations` with `rank: Alternate`, and `linux.mimeTypes: [application/pdf]` in the `.deb` (Debian/Ubuntu only).
 - **macOS** (milestone 10): built by GitHub Actions (`.github/workflows/build-mac.yml`, on a `macos-latest` runner) for every `v*` tag and on demand; the dmg is a run artifact, and the user adds it to the GitHub release. One universal dmg (Apple silicon + Intel). **Ad-hoc signed** (`identity: "-"`): no Apple account and no notarization (no paid certificates, as on Windows), so Gatekeeper asks once and the user clicks "Open Anyway" (README). Apple silicon refuses to run an app with no signature at all ("damaged"). `hardenedRuntime: false`, because hardened runtime rejects Electron's frameworks under an ad-hoc signature. The workflow checks the architectures (`lipo`), the signature (`codesign --verify`) and the PDF document type, then runs `scripts/smoke-test.mjs` on the packaged app (PDF from the command line, F5, full screen, a page forward, Esc, a PDF from Finder via `open -a`). The runner has one display, so multi-monitor behaviour is untested on the Mac. A failed run puts the end of its log in an annotation, readable without signing in (`/repos/nilovelez/pdf-diva/check-runs/<job id>/annotations` in the GitHub API). `electronDist` is only passed to the Windows scripts: on the Mac, electron-builder downloads Electron for both architectures. Electron 44 needs macOS 13 or later.
 - **macOS behaviour**: presentation windows use **simple full screen** (`setSimpleFullScreen`, see `windows.ts`): native full screen moves each window to its own Space, animated and asynchronous, which breaks `placeFullScreen()` (exit, move, enter). The app menu exists only on macOS, for Cmd+Q/Cmd+H and copy/paste in the password field; its labels are translated (`menu.*`) and it is rebuilt when the language changes. Closing the last window quits the app, as on Windows.
+- **Linux** (milestone 10, Debian and Ubuntu only): built by GitHub Actions (`.github/workflows/build-linux.yml`, `ubuntu-latest`) for every `v*` tag and on demand, like the Mac: one x64 `.deb`, a run artifact the user adds to the release. The workflow installs it with `apt`, checks the `.desktop` file and `chrome-sandbox`, then runs the smoke test under `xvfb-run` (one 1920x1080 virtual display). Settings live in `~/.config/PDF Diva` and removing the package leaves them (README says so).
+- **Linux behaviour**: the app forces **X11** (`ozone-platform x11`, `main.ts`; XWayland on a Wayland desktop), because Wayland does not let an app place its windows on a given display. A user who passes `--ozone-platform=...` on the command line overrides it (checked in `process.argv`: on Wayland, Electron adds its own switch, so `app.commandLine` cannot tell). Tested by the user on real hardware: Linux Mint 22.3 MATE (two displays) and Ubuntu 24.04 on X11. **Known risk**: Wayland with XWayland on real hardware is untested (in a VirtualBox VM the window did not paint, probably the VM's graphics); the README suggests "Ubuntu on Xorg" if the window does not appear.
 - MSIX (`appx` target): `runFullTrust` (Electron needs it). Identity values come from Partner Center and are in `electron-builder.yml` (`4095RedViral.PDFDiva`, publisher `CN=140CA302-E9F8-47D7-BC52-9FEFCB98772E`, display name "Nilo Vélez"); the version in the manifest is `<version>.0`. The Store requires a first version number of 1 or more.
 - Building the MSIX needs `makeappx.exe` and, because the tiles come in several scales, `makepri.exe`, from the Windows SDK. electron-builder bundles old copies that **do not start on current Windows 11**; the fix is to put working ones where electron-builder looks (its cache, `winCodeSign-*/…/windows-10/x64`). The details for the build machine are in the project memory (`marcianito-machine`).
 - Do **not** try to sideload the unsigned MSIX: Windows refuses unsigned packages that run an `.exe`. A package signed with a self-signed test certificate (subject = the manifest Publisher) did not install on the user's test machine either ("the publisher's certificate can't be verified", even with the certificate imported and developer mode on). Registering the unpacked folder with `Add-AppxPackage -Register AppxManifest.xml` in developer mode (publisher without the unsigned-namespace OID) is what worked for testing MSIX behaviour (settings virtualization, offline, drag and drop, displays). Test installer behaviour with the NSIS build.
@@ -100,7 +103,7 @@ There are no automated tests apart from `scripts/smoke-test.mjs` (`node scripts/
 1. Work in small commits (English, `feat:`/`fix:`/`chore:`/`docs:`), `typecheck` and `lint` green. A single agent session writes to `main`; unfinished milestone work goes on a pushed `feat/...` branch so another session can pick it up.
 2. The `development` branch belongs to the user, for manual edits. Before pushing, fetch it; if it has new commits, review them, merge them into `main` (merge commit, no rebase), check `typecheck` and `lint`, push `main`, then fast-forward `development` to `main` and push it.
 3. At a milestone close: CHANGELOG entry and README, bump the version (`npm version X.Y.Z --no-git-tag-version`, commit), annotated tag (`git tag -a vX.Y.Z -m "Milestone N: …"`), `git push origin main` and `git push origin vX.Y.Z` as separate plain commands, then stop until the user has tested it.
-4. The **user** creates the GitHub release from the web (there is no `gh` on the build machine) with the installer attached, and uploads the `.appx` to Partner Center. The agent prepares the release text (the CHANGELOG entry plus the SmartScreen note) and leaves the installer and `.appx` in the shared folder.
+4. Pushing the tag starts the Mac and Linux builds in GitHub Actions; their dmg and deb are run artifacts (downloading them needs a GitHub sign-in). The **user** creates the GitHub release from the web (there is no `gh` on the build machine) with the Windows installer, the dmg and the deb attached, and uploads the `.appx` to Partner Center. The agent prepares the release text (the CHANGELOG entry plus the install notes) and leaves the installer and `.appx` in the shared folder.
 5. Pushing `site/` or `PRIVACY.md` redeploys the website (GitHub Actions).
 
 ## Testing
