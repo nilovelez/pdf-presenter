@@ -14,18 +14,19 @@ import esAndaluh from '../../locales/es-x-andaluh.json';
 export type MessageKey = Exclude<keyof typeof en, '_language'>;
 type Catalog = { _language: string } & Partial<Record<MessageKey, string>>;
 
-// Order of the language selector. Andalûh ("es-x-andaluh") is never picked from the system
-// languages: its base is "es", so resolveLanguage() picks Spanish; it is chosen by hand.
+// In the order of the language selector: alphabetical by each language's own name. Andalûh
+// ("es-x-andaluh") is never picked from the system languages: its base is "es", so
+// resolveLanguage() picks Spanish; it is chosen by hand.
 const CATALOGS = {
-  en,
-  es,
-  ca,
-  de,
-  fr,
-  it,
-  nl,
-  pt,
-  'es-x-andaluh': esAndaluh,
+  'es-x-andaluh': esAndaluh, // Andalûh
+  ca, // Català
+  de, // Deutsch
+  en, // English
+  es, // Español
+  fr, // Français
+  it, // Italiano
+  nl, // Nederlands
+  pt, // Português
 } satisfies Record<string, Catalog>;
 
 export type Language = keyof typeof CATALOGS;
