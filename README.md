@@ -10,16 +10,16 @@ It doesn't need Acrobat or any other installed program: PDFs are rendered with a
 
 ## Status
 
-**Version 1.3.0.** You present with a speaker view (current slide, next slide and timer), choose what each monitor shows (several speaker views, or the slide mirrored on every screen), change it on the fly and keep going if a cable comes loose. Password-protected PDFs open too. See the [changelog](CHANGELOG.md) for what each version includes.
+**Version 1.4.0.** You present with a speaker view (current slide, next slide and timer), choose what each monitor shows (several speaker views, or the slide mirrored on every screen), change it on the fly and keep going if a cable comes loose. Password-protected PDFs open too. It runs on Windows, macOS and Linux (Debian and Ubuntu). See the [changelog](CHANGELOG.md) for what each version includes.
 
-The interface is in **English and Spanish**. It uses the system language when PDF Diva has it, and English otherwise; you can change it in the settings. Want PDF Diva in your language? See [Translating PDF Diva](docs/translating.md).
+The interface is in **English, Spanish, Catalan, Dutch, French, German, Italian and Portuguese**, plus Andalûh. It uses the system language when PDF Diva has it, and English otherwise; you can change it in the settings. Want PDF Diva in your language? See [Translating PDF Diva](docs/translating.md).
 
 ## Requirements
 
 - Windows 10 or 11, 64-bit (x64). It also runs on Windows 11 on ARM, through Windows' built-in emulation.
-- macOS 13 Ventura or later, on Apple silicon or Intel (preview: see [On a Mac](#on-a-mac-preview)).
-- Linux is planned.
-- No administrator rights, internet connection or other programs needed.
+- macOS 13 Ventura or later, on Apple silicon or Intel.
+- Linux: Debian, Ubuntu or a distribution based on them (such as Linux Mint), 64-bit (x64).
+- No internet connection or other programs needed. On Windows and macOS, no administrator rights either.
 
 ## Installing
 
@@ -41,7 +41,7 @@ The first start after installing can take a minute on a slow computer, while the
 
 To update, download and run the new installer: your settings are kept.
 
-### On a Mac (preview)
+### On a Mac
 
 1. Download `PDF-Diva-<version>.dmg` from the [latest release](https://github.com/nilovelez/pdf-diva/releases/latest), open it and drag **PDF Diva** to **Applications**.
 2. Open PDF Diva from Applications. The first time, macOS says it can't verify the developer, because the app isn't notarized by Apple. Click **Done** (or **Cancel**).
@@ -49,11 +49,27 @@ To update, download and run the new installer: your settings are kept.
 
 macOS only asks once. To update, replace the app in Applications with the new one: your settings are kept.
 
+### On Linux (Debian and Ubuntu)
+
+1. Download `PDF-Diva-<version>-amd64.deb` from the [latest release](https://github.com/nilovelez/pdf-diva/releases/latest).
+2. Install it from a terminal in the download folder:
+
+   ```bash
+   sudo apt install ./PDF-Diva-<version>-amd64.deb
+   ```
+
+   Opening the file with your desktop's software installer works too.
+3. Open **PDF Diva** from the applications menu.
+
+To update, install the new `.deb` the same way: your settings are kept.
+
 ### Uninstalling
 
 On Windows, go to *Settings > Apps > Installed apps*, find **PDF Diva** and choose **Uninstall**. Your settings are removed too.
 
 On a Mac, drag **PDF Diva** from Applications to the Trash. Your settings stay in `~/Library/Application Support/PDF Diva`; delete that folder to remove them.
+
+On Linux, run `sudo apt remove pdf-diva`. Your settings stay in `~/.config/PDF Diva`; delete that folder to remove them.
 
 ## Running from source (for developers)
 
@@ -94,11 +110,13 @@ PDF Diva appears in **Open with** when you right-click a PDF in File Explorer. I
 
 On a Mac, PDF Diva appears in Finder's **Open With** menu. To open every PDF with it, select a PDF, choose *File > Get Info*, pick **PDF Diva** under **Open with** and click **Change All**.
 
-PDF Diva opens one window only: a PDF opened from File Explorer or Finder while the app is running replaces the one in the reader. If a presentation is running, it ends and the new PDF opens in the reader.
+On Linux, PDF Diva appears in your file manager's **Open With** list for PDFs.
+
+PDF Diva opens one window only: a PDF opened from File Explorer, Finder or your file manager while the app is running replaces the one in the reader. If a presentation is running, it ends and the new PDF opens in the reader.
 
 ### Presenting
 
-Connect the projector or external screen and set Windows to **Extend** mode (`Windows + P`); on a Mac, make sure the displays aren't mirrored (*System Settings > Displays*). Click **Present**, or press `F5` to start from the first page or `Shift+F5` to start from the page you're on.
+Connect the projector or external screen and set Windows to **Extend** mode (`Windows + P`); on a Mac or on Linux, make sure the displays aren't mirrored (*System Settings > Displays* on a Mac; your desktop's display settings on Linux). Click **Present**, or press `F5` to start from the first page or `Shift+F5` to start from the page you're on.
 
 Every monitor shows either the **speaker view** or the slide for the **audience**, full screen. By default the audience is on the last monitor and the speaker view on the others: with a laptop and a projector, you see the speaker view on the laptop; with three monitors, there are two speaker views (for example, the technician's and the speaker's) and the audience. With only one monitor, **Present** shows the slide full screen, without the speaker view.
 
@@ -136,14 +154,16 @@ Presentation remotes send these same keys, so they work without any setup. On re
 
 The gear button on the right of the reader toolbar opens **Settings**. Changes are saved automatically.
 
-- **Theme**: **System** follows Windows (*Settings > Personalization > Colors*) or macOS (*System Settings > Appearance*); you can also force **Light** or **Dark**. The audience screen is always black and PDF pages keep their original colors.
-- **Language**: **System** uses the system language if PDF Diva has it, and English otherwise; you can also pick a language. Each language is listed by its own name (English, Español). The change applies straight away; a presentation that is running keeps its language until it ends.
+- **Theme**: **System** follows Windows (*Settings > Personalization > Colors*), macOS (*System Settings > Appearance*) or your Linux desktop; you can also force **Light** or **Dark**. The audience screen is always black and PDF pages keep their original colors.
+- **Language**: **System** uses the system language if PDF Diva has it, and English otherwise; you can also pick a language. Each language is listed by its own name (English, Español, Deutsch…). Andalûh is never chosen automatically: pick it here. The change applies straight away; a presentation that is running keeps its language until it ends.
 
 ## Troubleshooting
 
 **The slides appear on the wrong screen.** Click **Configure displays** in the speaker view, choose what each monitor shows and click **Apply**. PDF Diva remembers it for next time.
 
 **Windows warns that the installer is unsafe.** The GitHub installer isn't digitally signed, so Windows SmartScreen shows a warning the first time. Click **More info** and then **Run anyway**. The Microsoft Store version doesn't show this warning.
+
+**On Linux, the PDF Diva window doesn't appear.** On a Wayland session, log out and choose **Ubuntu on Xorg** (or your desktop's X11 session) on the login screen. PDF Diva places its windows on each screen through X11.
 
 **`npm install` fails while downloading Electron.** Some computers are missing the *Microsoft Visual C++ Redistributable* (x64). Download it from Microsoft's website, install it and run `npm install` again. This is only needed for the development version.
 
