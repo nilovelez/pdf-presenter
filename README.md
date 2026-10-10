@@ -155,7 +155,7 @@ Presentation remotes send these same keys, so they work without any setup. On re
 The gear button on the right of the reader toolbar opens **Settings**. Changes are saved automatically.
 
 - **Theme**: **System** follows Windows (*Settings > Personalization > Colors*), macOS (*System Settings > Appearance*) or your Linux desktop; you can also force **Light** or **Dark**. The audience screen is always black and PDF pages keep their original colors.
-- **Language**: **System** uses the system language if PDF Diva has it, and English otherwise; you can also pick a language. Each language is listed by its own name (English, Español, Deutsch…). Andalûh is never chosen automatically: pick it here. The change applies straight away; a presentation that is running keeps its language until it ends.
+- **Language**: **System** uses the system language if PDF Diva has it, and English otherwise; you can also pick a language. Each language is listed by its own name (English, Español, Deutsch…). The change applies straight away; a presentation that is running keeps its language until it ends.
 
 ## Troubleshooting
 
