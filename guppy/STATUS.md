@@ -1,17 +1,19 @@
 ---
 estado: bloqueado
-siguiente_paso: Probar el .dmg del Mac en un Mac real (Nilo busca un Mac mini M1) y corregir lo que salga; después, documentación de Linux y fusionar feat/mac y feat/linux.
-bloqueo: "Nilo: prueba del .dmg en un Mac real."
-actualizado: 2026-10-09
+siguiente_paso: Cuando la release v1.4.0 esté publicada con los tres paquetes, actualizar los enlaces de descarga de la web (Windows, Mac y Linux).
+bloqueo: "Nilo: crear la release v1.4.0 en GitHub (instalador, .dmg y .deb) y subir el .appx a Partner Center."
+actualizado: 2026-10-10
 ---
 
 # Estado
 
-La v1.3.0 (hito 9) está publicada en GitHub y en la Microsoft Store (aprobada el 2026-10-09). El hito 10 (builds de Mac y Linux) está en curso en la rama `feat/mac`: GitHub Actions compila un `.dmg` universal con firma ad hoc que pasa la prueba de humo. Falta probarlo en un Mac real. Linux está en la rama `feat/linux` (sacada de `feat/mac`, con `main` fusionada): GitHub Actions compila un `.deb` (x64), lo instala y le pasa la prueba de humo; probado y bien en Linux Mint 22.3 y Ubuntu 24.04 (equipos reales, X11); queda como riesgo conocido Wayland con XWayland.
+La v1.4.0 (hito 10, el último de funciones) está etiquetada: builds de Windows (instalador NSIS y MSIX para la Store), Mac (`.dmg` universal con firma ad hoc, probado por Nilo en un MacBook con Apple silicon y un monitor externo) y Linux (`.deb` para Debian y Ubuntu, probado en Linux Mint 22.3 y Ubuntu 24.04 con X11), y siete idiomas nuevos (catalán, alemán, francés, italiano, neerlandés, portugués y andaluz EPA, este solo a mano). Riesgo conocido: Linux con Wayland y XWayland en equipos reales, sin probar.
 
-Aparte, hay siete idiomas nuevos preparados en `locales/` (francés, alemán, italiano, neerlandés, portugués, catalán y andaluz EPA), pero aún no están registrados en la app (`src/i18n/i18n.ts`).
+A partir de aquí, promoción y mantenimiento; no hay más hitos de funciones previstos.
 
 ## Diario
+
+- 2026-10-10: el .dmg funciona a la primera en un MacBook con Apple silicon y monitor externo. feat/mac y feat/linux fusionadas en main, idiomas nuevos registrados, v1.4.0 etiquetada; esperando a que Nilo publique la release.
 
 - 2026-10-09: sesión cerrada; en pausa hasta que Nilo pueda probar el .dmg en un Mac.
 - 2026-10-09: el .deb funciona en Ubuntu 24.04 desde USB en un portátil real (sesión X11); Nilo da por terminadas las pruebas de Linux.
