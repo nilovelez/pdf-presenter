@@ -57,7 +57,7 @@ Al abrir un PDF, la app ofrece la opción de **presentarlo**:
 - **Electron** (proceso principal + ventanas de renderizado)
 - **TypeScript** (estricto, `"strict": true`)
 - **PDF.js** (`pdfjs-dist`) para renderizar a `<canvas>`
-- **electron-builder** para empaquetar (NSIS en Windows; `.dmg` y `AppImage`/`.deb` más adelante)
+- **electron-builder** para empaquetar (NSIS y MSIX en Windows; `.dmg` universal en Mac y `.deb` en Linux, compilados por GitHub Actions)
 - UI en **HTML + CSS + TypeScript sin framework** (no usar React/Vue salvo que haya una razón clara)
 - Bundler sencillo (Vite o esbuild) solo si hace falta; mantener la configuración mínima
 
@@ -142,7 +142,7 @@ pdf-diva/
 ├─ resources/icons/    # iconos de la interfaz (Phosphor); app/ = iconos de la aplicación (.ico, baldosas MSIX)
 ├─ docs/               # developer-guide.md, translating.md, website.md, store-listing.md, maquetas de diseño
 ├─ site/               # la web (GitHub Pages); scripts/ genera su página de privacidad
-└─ .github/workflows/  # despliegue de la web; build del Mac (en `feat/mac`)
+└─ .github/workflows/  # despliegue de la web; builds de Mac y Linux (con cada tag v*)
 ```
 
 ## Convenciones de código
@@ -166,15 +166,17 @@ npm run lint         # ESLint (debe pasar antes de cada commit)
 npm run pack         # app empaquetada sin instalar, en release/win-unpacked/
 npm run dist         # instalador NSIS: release/PDF-Diva-Setup-<versión>.exe
 npm run dist:store   # paquete MSIX sin firmar: release/PDF-Diva-<versión>.appx
+npm run dist:mac     # solo en un Mac (lo hace GitHub Actions): release/PDF-Diva-<versión>.dmg
+npm run dist:linux   # solo en Linux (lo hace GitHub Actions): release/PDF-Diva-<versión>-amd64.deb
 ```
 
 En Windows no existe `python3`: para scripts de Python usar `python` o `py`.
 
-No hay tests automáticos, salvo una prueba de humo de la app empaquetada (`scripts/smoke-test.mjs`, en `feat/mac`) que ejecuta el build del Mac en GitHub Actions: se prueba la app real controlándola por el protocolo de DevTools (ver `docs/developer-guide.md`). Para compilar el MSIX hacen falta ajustes (herramientas del SDK y `ELECTRON_BUILDER_CACHE`): están en la memoria del proyecto.
+No hay tests automáticos, salvo una prueba de humo de la app empaquetada (`scripts/smoke-test.mjs`) que ejecutan los builds de Mac y Linux en GitHub Actions: se prueba la app real controlándola por el protocolo de DevTools (ver `docs/developer-guide.md`). Para compilar el MSIX hacen falta ajustes (herramientas del SDK y `ELECTRON_BUILDER_CACHE`): están en la memoria del proyecto.
 
 ## Plan por hitos
 
-Hitos 1 a 9 hechos (v0.1.0 a v1.3.0). En curso: el 10 (Mac y Linux, desde el 2026-10-08; antes era el 9, y antes el 8).
+Hitos 1 a 10 hechos (v0.1.0 a v1.4.0). No hay más hitos de funciones previstos: a partir de aquí, promoción y mantenimiento.
 
 1. **Esqueleto**: proyecto Electron + TypeScript que abre una ventana.
 2. **Visor básico**: abrir un PDF y renderizar una página con PDF.js; navegar con teclado.
@@ -183,9 +185,9 @@ Hitos 1 a 9 hechos (v0.1.0 a v1.3.0). En curso: el 10 (Mac y Linux, desde el 202
 5. **Robustez**: un solo monitor, cambios de monitores, selector de monitor, errores de PDF.
 6. **Empaquetado y distribución (Windows)**, dos canales con electron-builder: (1) Microsoft Store con paquete MSIX (target `appx`), que la Store firma gratis y sin aviso de SmartScreen; (2) instalador NSIS sin firmar en GitHub Releases, para equipos con la Store bloqueada (SmartScreen avisará; se explica en el README). Firma: nada de certificados de pago anuales (el instalador de GitHub queda sin firmar); Azure Artifact Signing no está disponible para particulares en España. `appId` com.nilovelez.pdfdiva; la identidad del paquete de la Store (Identity Name, Publisher, nombre reservado) sale de Partner Center. La política de privacidad es `PRIVACY.md`.
 7. **Multiidioma**: interfaz traducible, con el español y el inglés como primeros idiomas (el inglés va antes que Mac y Linux).
-8. **Abrir PDFs desde el sistema**: que PDF Diva aparezca en «Abrir con…» y el usuario pueda elegirla como aplicación predeterminada para PDFs (Windows: NSIS y MSIX; Mac y Linux preparados para el hito 10).
+8. **Abrir PDFs desde el sistema**: que PDF Diva aparezca en «Abrir con…» y el usuario pueda elegirla como aplicación predeterminada para PDFs (Windows: NSIS y MSIX; Mac y Linux en el hito 10).
 9. **Multimonitor y mejora de interfaz** (opiniones reales de usuarios): primero, que la interfaz se adapte mejor a distintas resoluciones y densidades de pantalla (empezando por la vista del orador en resoluciones grandes); después, cambiar el comportamiento con tres monitores (dos vistas del orador, técnico y ponente, y una salida al público). Se prueba con los dos adaptadores DisplayPort (3 pantallas reales en Marcianito).
-10. **Extra (baja prioridad)**: builds de Mac y Linux. En Linux solo se da soporte a **Debian y Ubuntu**.
+10. **Mac y Linux**: builds de Mac (`.dmg` universal, firma ad hoc) y Linux (`.deb`) en GitHub Actions, y siete idiomas nuevos. En Linux solo se da soporte a **Debian y Ubuntu**.
 
 ## Fuera de alcance (por ahora)
 
